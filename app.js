@@ -12,6 +12,7 @@ db.collection('users').insertOne( {
             { "page_id": 1, "time_spent": 7 }
         ],
         "Feature":{ "age": 35, "gender": "male", "income": 100000, "race":"chinese", "job_industry": "software", "education_level":"degree" },
+        "Recommendation" : [0 , 1, 2]
     }, function(err, result) {
     assert.equal(err, null);
     console.log("Inserted a document into the users collection.");
