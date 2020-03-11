@@ -1,8 +1,8 @@
-var MongoClient = require('mongodb').MongoClient
-var assert = require('assert')
-var ObjectId = require('mongodb').ObjectID
+var MongoClient = require('mongodb').MongoClient;
+var assert = require('assert');
+var ObjectId = require('mongodb').ObjectID;
 var url =
-  'mongodb://cpf-neumorphic:qStpEFKhgtoODsZs94AVKlocKB6mE5GLf2lg4nN8aZrIHkroPCdxASEjWKe9nxu5DXJ8JlLWqsEr7O2izrCUiQ%3D%3D@cpf-neumorphic.mongo.cosmos.azure.com:10255/?ssl=true&appName=@cpf-neumorphic@'
+  'mongodb://cpf-neumorphic:qStpEFKhgtoODsZs94AVKlocKB6mE5GLf2lg4nN8aZrIHkroPCdxASEjWKe9nxu5DXJ8JlLWqsEr7O2izrCUiQ%3D%3D@cpf-neumorphic.mongo.cosmos.azure.com:10255/?ssl=true&appName=@cpf-neumorphic@';
 
 var insertDocument = function(db) {
   db.collection('users').insertOne(
@@ -24,19 +24,19 @@ var insertDocument = function(db) {
       Recommendation: [0, 1, 2]
     },
     function(err, result) {
-      assert.equal(err, null)
-      console.log('Inserted a document into the users collection.')
+      assert.equal(err, null);
+      console.log('Inserted a document into the users collection.');
     }
-  )
-}
+  );
+};
 
 var findFamilies = function(db) {
   db.collection('users')
     .find({ NRIC: 'S9526187D' })
     .toArray(function(err, result) {
-      console.log(result[0].Usage)
-    })
-}
+      console.log(result[0].Usage);
+    });
+};
 
 var updateFamilies = function(db) {
   db.collection('users').update(
@@ -45,22 +45,22 @@ var updateFamilies = function(db) {
       $set: { 'Usage.$.time_spent': 25 }
     },
     function(err, results) {
-      console.log(results)
+      console.log(results);
     }
-  )
-}
+  );
+};
 
 var removeFamilies = function(db) {
-  db.collection('users').deleteMany({ NRIC: 'S9474355I' })
-}
+  db.collection('users').deleteMany({ NRIC: 'S9474355I' });
+};
 
 MongoClient.connect(url, function(err, client) {
-  assert.equal(null, err)
-  var db = client.db('cpf-neumorphic')
+  assert.equal(null, err);
+  var db = client.db('cpf-neumorphic');
 
   // insertDocument(db);
-  findFamilies(db)
+  findFamilies(db);
   //removeFamilies(db);
   // updateFamilies(db)
-  client.close()
-})
+  client.close();
+});
