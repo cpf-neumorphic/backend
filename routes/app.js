@@ -1,7 +1,4 @@
-// var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
-// var ObjectId = require('mongodb').ObjectID;
-// var url = 'mongodb://cpf-neumorphic:qStpEFKhgtoODsZs94AVKlocKB6mE5GLf2lg4nN8aZrIHkroPCdxASEjWKe9nxu5DXJ8JlLWqsEr7O2izrCUiQ%3D%3D@cpf-neumorphic.mongo.cosmos.azure.com:10255/?ssl=true&appName=@cpf-neumorphic@';
 const express = require("express");
 const db = require("../db");
 const router = express.Router();
@@ -117,7 +114,7 @@ router.get("/getAllUsage", (req,res)=>{
 
     db.get().collection('users').find({}).toArray(function(err, result){
         for(let i = 0; i<result.length; i++){
-
+            
             let csvobj = {"NRIC": result[i].NRIC, "Usage": result[i].Usage}
         }
         // console.log(result[0].Usage)
