@@ -60,6 +60,6 @@ const optionGetAllUsage ={
   },
 }
 
-request(optionGetUsage, function(error, response, body) {
+request(optionGetAllUsage, function(error, response, body) {
   console.log(response);
 });

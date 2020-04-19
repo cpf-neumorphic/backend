@@ -1,5 +1,9 @@
 var assert = require('assert');
 const express = require("express");
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+const {parseAsync} = require('json2csv');
 const db = require("../db");
 const router = express.Router();
 
@@ -110,15 +114,43 @@ router.post("/updateUsage", (req,res)=>{
 
 })
 
+async function writeToFile(data, filename){
+    const field = ["NRIC","page_id","time_spent"];
+    const opts = {field};
+    const resultcsv = await parseAsync(data, opts);
+    fs.writeFileSync(filename, resultcsv)
+}
+
 router.get("/getAllUsage", (req,res)=>{
+
+    let data = [];
+    const filename = path.join(__dirname, '../public/usage/usage_data.csv');
+    const output = [];
 
     db.get().collection('users').find({}).toArray(function(err, result){
         for(let i = 0; i<result.length; i++){
-            
-            let csvobj = {"NRIC": result[i].NRIC, "Usage": result[i].Usage}
+            let id = result[i].NRIC
+            for (let j = 0; j<result[i].Usage.length;j++){
+                let pid = result[i].Usage[j].page_id
+                let time = result[i].Usage[j].time_spent
+                data.push({NRIC: id, page_id: pid, time_spent: time})
+            }
         }
-        // console.log(result[0].Usage)
+
+        //Write to csv
+        writeToFile(data,filename);
+        
+        // data.forEach((d)=>{
+        //     const row = [];
+        //     row.push(d.NRIC);
+        //     row.push(d.page_id);
+        //     row.push(d.time_spent);
+        //     output.push(row.join())
+        // });
+
+        // fs.writeFileSync(filename, output.join(os.EOL));
     });
+
     res.end("OK")
 
 })

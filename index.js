@@ -7,6 +7,8 @@ app.use(require('cors')({ origin: true, credentials: true }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
+app.use(express.static('public'))
+
 db.connect(()=>{
     app.listen(process.env.PORT || 3001, function(){
         console.log("Listening");
