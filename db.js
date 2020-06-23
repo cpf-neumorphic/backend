@@ -3,11 +3,11 @@ var url = require('./credentials').mongoDBUrl
 
 let mongodb;
 
-function connect(callback){
+function connect(){
 
     MongoClient.connect(url, function(err, client) {
-        mongodb = client.db('cpf-neumorphic');
-        callback();
+        mongodb = client.db('neumorphic');
+        console.log("DB Connected")
     });
 }
 

@@ -55,10 +55,10 @@ var removeFamilies = function(db) {
 
 MongoClient.connect(url, function(err, client) {
   assert.equal(null, err);
-  var db = client.db('cpf-neumorphic');
+  var db = client.db('neumorphic');
 
-  // insertDocument(db);
-  findFamilies(db);
+  insertDocument(db);
+  // findFamilies(db);
   //removeFamilies(db);
   // updateFamilies(db)
   client.close();
