@@ -8,6 +8,8 @@ const db = require("../db");
 const router = express.Router();
 
 
+//------------------------------------------ Helper Function ---------------------------------------
+
 var updateUsage = function(id, page_id, duration) {
     db.get().collection('users').updateOne(
         { "NRIC" : id, "Usage.page_id":page_id},
@@ -34,6 +36,16 @@ var insertUsage = function(id, page_id, duration, usage) {
     });
 }
 
+async function writeToFile(data, filename){
+    const field = ["NRIC","page_id","time_spent"];
+    const opts = {field};
+    const resultcsv = await parseAsync(data, opts);
+    fs.writeFileSync(filename, resultcsv)
+}
+
+//---------------------------------------API Usage for front-end-----------------------------------
+
+// Updates page visit duration
 router.post("/updateUsage", (req,res)=>{
     let request = req.body
     let id = request.NRIC
@@ -56,13 +68,22 @@ router.post("/updateUsage", (req,res)=>{
 
 })
 
-async function writeToFile(data, filename){
-    const field = ["NRIC","page_id","time_spent"];
-    const opts = {field};
-    const resultcsv = await parseAsync(data, opts);
-    fs.writeFileSync(filename, resultcsv)
-}
 
+// Gets recommended features predicted by ML
+router.get("/getRecommendation", (req, res) => {
+
+    let id = req.query.NRIC
+    db.get().collection('users').find({"NRIC": id}).toArray(function(err, result){
+        console.log(result[0].Recommendation)
+        let reccommend = {suggestions: result[0].Recommendation}
+        res.json(reccommend)
+    });
+
+})
+
+//---------------------------------------- API Usage by ML -----------------------------------------------
+
+// Writes user usage to csv file
 router.get("/getAllUsage", (req,res)=>{
 
     let data = [];
@@ -88,26 +109,19 @@ router.get("/getAllUsage", (req,res)=>{
 
 })
 
-router.get("/getRecommendation", (req, res) => {
-
-    let id = req.query.NRIC
-    db.get().collection('users').find({"NRIC": id}).toArray(function(err, result){
-        console.log(result[0].Recommendation)
-        res.end("OK")
-    });
-
-})
-
+// Gets usage information based on NRIC 
 router.get("/getUsage", (req, res) => {
 
     let id = req.query.NRIC
     db.get().collection('users').find({"NRIC": id}).toArray(function(err, result){
         console.log(result[0].Usage)
-        res.end("OK")
+        let data = {usage_report: result[0].Usage}
+        res.json(data)
     });
 
 })
 
+// Update Recommendation after re-training
 router.post("/updateRecommendation", (req, res)=>{
 
     let request = req.body
