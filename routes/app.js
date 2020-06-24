@@ -48,8 +48,8 @@ async function writeToFile(data, filename){
 // Updates page visit duration
 router.post("/updateUsage", (req,res)=>{
     let request = req.body
-    let id = request.NRIC
-    let page_id = request.pageID
+    let id = request.nric
+    let page_id = request.page_id
     let duration = request.duration
 
 
@@ -72,7 +72,7 @@ router.post("/updateUsage", (req,res)=>{
 // Gets recommended features predicted by ML
 router.get("/getRecommendation", (req, res) => {
 
-    let id = req.query.NRIC
+    let id = req.query.nric
     db.get().collection('users').find({"NRIC": id}).toArray(function(err, result){
         console.log(result[0].Recommendation)
         let reccommend = {suggestions: result[0].Recommendation}
@@ -88,7 +88,6 @@ router.get("/getAllUsage", (req,res)=>{
 
     let data = [];
     const filename = path.join(__dirname, '../public/usage/usage_data.csv');
-    const output = [];
 
     db.get().collection('users').find({}).toArray(function(err, result){
         for(let i = 0; i<result.length; i++){
@@ -112,7 +111,7 @@ router.get("/getAllUsage", (req,res)=>{
 // Gets usage information based on NRIC 
 router.get("/getUsage", (req, res) => {
 
-    let id = req.query.NRIC
+    let id = req.query.nric
     db.get().collection('users').find({"NRIC": id}).toArray(function(err, result){
         console.log(result[0].Usage)
         let data = {usage_report: result[0].Usage}
@@ -125,8 +124,8 @@ router.get("/getUsage", (req, res) => {
 router.post("/updateRecommendation", (req, res)=>{
 
     let request = req.body
-    let id = request.NRIC
-    let suggestions = request.Recommendation
+    let id = request.nric
+    let suggestions = request.recommendation
 
     db.get().collection('users').update(
         { "NRIC" : id},
