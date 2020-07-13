@@ -5,7 +5,7 @@ let mongodb;
 
 function connect(){
 
-    MongoClient.connect(url, function(err, client) {
+    MongoClient.connect(url,{useUnifiedTopology: true,useNewUrlParser: true,} ,function(err, client) {
         mongodb = client.db('neumorphic');
         console.log("DB Connected")
     });

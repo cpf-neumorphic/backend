@@ -1,11 +1,14 @@
 module.exports = {
     apps: [{
         name: 'backend',
-        script: 'npm',
-        args: 'start',
+        script: './bin/www',
+        env_production:{
+            "NODE_ENV": "production"
+        },
         exec_mode: 'cluster',
-        instances: 'max',
+        instances: 2,
+        autorestart: true,
         watch:false,
-        max_memory_restart: '300M',
+        max_memory_start: '1G',
     }]
 }
