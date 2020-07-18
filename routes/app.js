@@ -56,9 +56,9 @@ router.post("/updateUsage", (req,res)=>{
     db.get().collection('users').find({"NRIC": id}).toArray(function(err, result){
         for (let i = 0; i< result[0].Usage.length; i++){
             if (result[0].Usage[i].page_id === page_id){
-                if (duration >  result[0].Usage[i].time_spent){
-                    updateUsage(id, page_id, duration)
-                }
+            // if (duration >  result[0].Usage[i].time_spent){
+                updateUsage(id, page_id, duration)
+            // }
                 break
             }else if(i === result[0].Usage.length - 1 && result[0].Usage[i].page_id !== page_id){
                 insertUsage(id, page_id, duration, result[0].Usage)
@@ -67,7 +67,6 @@ router.post("/updateUsage", (req,res)=>{
     });
 
     res.end("OK")
-
 })
 
 
